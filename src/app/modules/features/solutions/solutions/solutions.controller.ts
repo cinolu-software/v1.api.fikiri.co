@@ -19,7 +19,6 @@ import { UpdateSolutionDto } from './dto/update-solution.dto';
 import { UpdateUserSolutionDto } from './dto/update-user-solution.dto';
 import { Solution } from './entities/solution.entity';
 import { QueryParams } from './types/query-params.interface';
-import { SearchParams, SearchResponse } from 'meilisearch';
 import { Public } from '../../../../common/decorators/public.decorator';
 import { Roles } from '../../../../common/decorators/roles.decorator';
 import { CurrentUser } from '../../../../common/decorators/user.decorator';
@@ -30,20 +29,9 @@ import { User } from '../../../core/users/entities/user.entity';
 export class SolutionsController {
   constructor(private readonly solutionsService: SolutionsService) {}
 
-  @Public()
-  @Get('search')
-  search(@Query('q') query: string): Promise<{ data: SearchResponse<Record<string, any>, SearchParams> }> {
-    return this.solutionsService.search(query);
-  }
-
   @Get('user')
   findByUser(@CurrentUser() user: User): Promise<{ data: Solution[] }> {
     return this.solutionsService.findByUser(user);
-  }
-
-  @Get('add-document')
-  addDocument(): Promise<void> {
-    return this.solutionsService.addDocument();
   }
 
   @Post('')

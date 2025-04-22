@@ -6,10 +6,8 @@ import { Solution } from './entities/solution.entity';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueryParams } from './types/query-params.interface';
-import { SearchParams, SearchResponse } from 'meilisearch';
 import { CurrentUser } from '../../../../common/decorators/user.decorator';
 import { User } from '../../../core/users/entities/user.entity';
-import { SearchService } from '../../../utilities/search/search.service';
 import { ImagesService } from '../../../utilities/images/images.service';
 
 @Injectable()
@@ -17,8 +15,7 @@ export class SolutionsService {
   constructor(
     @InjectRepository(Solution)
     private readonly solutionRepository: Repository<Solution>,
-    private readonly imageService: ImagesService,
-    private readonly searchService: SearchService
+    private readonly imageService: ImagesService
   ) {}
 
   async create(dto: CreateSolutionDto, @CurrentUser() user: User): Promise<{ data: Solution }> {
@@ -263,22 +260,5 @@ export class SolutionsService {
       .where('s.userId = :userId', { userId: user.id })
       .getMany();
     return { data };
-  }
-
-  async search(query: string): Promise<{ data: SearchResponse<Record<string, any>, SearchParams> }> {
-    const searchParams: SearchParams = {
-      attributesToRetrieve: ['id', 'name', 'description', 'created_at', 'video_link'],
-      attributesToCrop: ['description'],
-      attributesToHighlight: ['name', 'description'],
-      limit: 20
-    };
-    const { data } = await this.searchService.search('solutions', query, searchParams);
-    return { data };
-  }
-
-  async addDocument(): Promise<void> {
-    const { data: solutions } = await this.findCurated();
-    this.searchService.addDocument<Solution>('solutions', solutions);
-    this.searchService.updateFilterableAttributes('solutions', ['thematic']);
   }
 }

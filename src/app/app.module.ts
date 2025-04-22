@@ -16,7 +16,6 @@ import { SolutionFeedbacksModule } from './modules/features/solutions/solution-f
 import { StatusModule } from './modules/features/solutions/status/status.module';
 import { DatabaseModule } from './modules/core/database/database.module';
 import { EmailModule } from './modules/utilities/email/email.module';
-import { SearchModule } from './modules/utilities/search/search.module';
 import { RolesModule } from './modules/core/roles/roles.module';
 import { RolesGuard } from './modules/core/auth/guards/roles.guard';
 import { AuthGuard } from './modules/core/auth/guards/auth.guard';
@@ -51,8 +50,7 @@ import { ChallengesModule } from './modules/features/events/challenges/challenge
     ImagesModule,
     DatabaseModule,
     SolutionFeedbacksModule,
-    CategoriesModule,
-    SearchModule
+    CategoriesModule
   ],
   providers: [
     {
